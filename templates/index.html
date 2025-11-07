@@ -1,0 +1,81 @@
+<!-- templates/index.html -->
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>FFmpeg Web UI</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 900px; margin: 2rem auto; }
+    .field { margin-bottom: 1rem; }
+    label { display:block; font-weight:600; margin-bottom:0.2rem; }
+    input[type="text"], input[type="number"], textarea { width:100%; padding:0.5rem; }
+    .small { width: 48%; display:inline-block; vertical-align:top; }
+    .btn { padding: 0.6rem 1rem; font-weight:600; }
+    .note { color:#555; font-size:.9rem; }
+  </style>
+</head>
+<body>
+  <h1>Media processer (FFmpeg)</h1>
+  <form action="/process" method="post" enctype="multipart/form-data">
+    <div class="field">
+      <label>Choose input file (video/audio)</label>
+      <input type="file" name="input_file" accept="video/*,audio/*" required>
+      <p class="note">Supported extensions: mp4, mov, mkv, webm, mp3, wav, aac, m4a, flac</p>
+    </div>
+
+    <fieldset style="padding:1rem; margin-bottom:1rem;">
+      <legend><strong>Overlay Options</strong></legend>
+      <div>
+        <label><input type="checkbox" name="overlay_enable" checked> Enable overlay (video only)</label>
+        <p class="note">If enabled and the file has video, will crop/scale to 9:16, scale to 720x1280 and add the moving text "@TowsifAktar".</p>
+      </div>
+    </fieldset>
+
+    <fieldset style="padding:1rem; margin-bottom:1rem;">
+      <legend><strong>Metadata (optional)</strong></legend>
+      <label><input type="checkbox" name="metadata_enable" checked> Write metadata tags</label>
+      <div style="margin-top:0.8rem;">
+        <div class="small">
+          <label>Title</label>
+          <input type="text" name="title" placeholder="Surah Quraysh">
+        </div>
+        <div class="small" style="float:right;">
+          <label>Artist</label>
+          <input type="text" name="artist" placeholder="Towsif Aktar">
+        </div>
+        <div style="clear:both;"></div>
+        <label>Album</label>
+        <input type="text" name="album" placeholder="QURAN RECITATION">
+        <div class="small">
+          <label>Genre</label>
+          <input type="text" name="genre" placeholder="Islamic">
+        </div>
+        <div class="small" style="float:right;">
+          <label>Year</label>
+          <input type="number" name="year" placeholder="2025">
+        </div>
+        <div style="clear:both;"></div>
+        <label>Comment</label>
+        <textarea name="comment" rows="2" placeholder="Beautiful recitation..."></textarea>
+        <label>Copyright</label>
+        <input type="text" name="copyright" placeholder="© 2025 Towsif Aktar">
+      </div>
+    </fieldset>
+
+    <button class="btn" type="submit">Upload & Process</button>
+  </form>
+
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <ul style="color:red;">
+      {% for m in messages %}
+        <li>{{ m }}</li>
+      {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+
+  <hr>
+  <p class="note">After processing completes, you'll be redirected to a download link.</p>
+</body>
+</html>
